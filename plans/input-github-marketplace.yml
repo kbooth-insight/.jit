@@ -1,0 +1,59 @@
+# List of inputs to the plan
+# Did you build a Github App (yes/no)?
+is_github_app_type_github_app:
+# Please specify the application ID
+github_app_id:
+# Does your app implements the Least Privilege Principle (yes/no)?
+is_least_privilege_implemented:
+# Does your app provide customers with a way to directly delete their account (yes/no)?
+can_account_be_deleted:
+# Does the app share tokens between different implementations of the app (yes/no)?
+has_dedicated_token:
+# Does your app implement role-based access control (yes/no)?
+is_rbac_implemented:
+# Do all services used in your app have unique login and credentials (yes/no)?
+has_all_services_unique_creds:
+# Does the app share service accounts (yes/no)?
+is_service_account_shared:
+# Does production only gets access by Eng and employees with admin duties (yes/no)?
+is_prod_access_restricted:
+# Is your app using JWT, OAuth or installation acces token (Github Apps) or OAuth token (Github OAuth apps) (yes/no)?
+is_using_pat_access_api:
+# Does your app encrypt data in transit using HTTPS with a valid TLS certificate (yes/no)?
+is_traffic_encrypted:
+# Does your app store Client ID and Client secret keys securely (e.g. with env variables) (yes/no)?
+is_storing_creds_securely:
+# Does the app delete all GitHub user data within 30 days of receiving a request from the user, or within 30 days of the end of the user's legal relationship with GitHub (yes/no)?
+is_deletion_within_days:
+# Does your app require the user to provide their GitHub password (yes/no)?
+is_asking_github_password:
+# Does your app encrypt tokens, client IDs, and client secrets (yes/no)?
+is_secrets_encrypted:
+# Does the app have logging and monitoring capabilities (yes/no)?
+is_logs_enabled:
+# Does your app retain logs for at least 30 days and archive them for at least 1 year (yes/no)?
+is_logs_retained:
+# Does your security log include the following field: "Authentication and authorization eventsService configuration changes" (yes/no)?
+has_logs_format_authn_authz:
+# Does your security log include the following field: "Object reads and writes" (yes/no)?
+has_logs_format_obj_read_write:
+# Does your security log include the following field: "All user and group permission changes" (yes/no)?
+has_logs_format_user_group_perm_changes:
+# Does your security log include the following field: "Elevation of role to admin" (yes/no)?
+has_logs_format_elevation_role:
+# Does your security log include the following field: "Consistent timestamping for each event" (yes/no)?
+has_logs_format_event_ts:
+# Does your security log include the following field: "Source users, IP addresses, and/or hostnames for all logged actions" (yes/no)?
+has_logs_format_source_users:
+# Do you have a clear incident response plan (yes/no)?
+has_incident_plan:
+# Do you have a security and operations incident response team in your company (yes/no)?
+has_security_ops_incident_team:
+# Do you have the capability to notify GitHub within 24 hours of a confirmed incident (yes/no)?
+can_notify_github:
+# Do you triage the results of vulnerability scans and define a period of time in which you agree to remediate the vulnerability (yes/no)?
+has_triage_process_mttr:
+# Do you conduct regular vulnerability scans of production infrastructure (yes/no)?
+has_periodic_infra_scans: yes
+# Do you have a patching system (yes/no)?
+has_patching_system: no
