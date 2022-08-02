@@ -1,0 +1,16 @@
+owners:
+  default: null
+name: My plan
+author: Jit
+items:
+  - name: Scan code for vulnerabilities
+    uses: >-
+      jitsecurity-controls/jit-plans/items/code/item-code-vulnerability.yml@latest
+  - name: Conduct periodic vulnerability scans
+    uses: >-
+      jitsecurity-controls/jit-plans/items/infrastructure/item-vulnerability-scan.yml@latest
+level: beginner
+version: 0.1
+references:
+  - https://www.jit.io
+tags: []
