@@ -47,3 +47,45 @@ jobs:
         security_control_args: -fmt=json -severity=high /code/...
         
         dispatch_type: workflow
+
+  software-component-analysis-python:
+    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, 'fa8da1d5-0dbd-4dd1-9d2d-77b25d02ea82') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-python'
+    runs-on: ubuntu-latest
+    steps:
+    - name: dependency-check-python
+      uses: jitsecurity-controls/jit-github-action@v1.6
+      with:
+        docker_user: jit-bot
+        docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
+        security_control: ghcr.io/jitsecurity-controls/control-dependency-check-alpine:latest
+        security_control_args: --scan /code --enableExperimental --disableJar --disableRubygems --disableBundleAudit --disableCocoapodsAnalyzer --disableSwiftPackageManagerAnalyzer --disableSwiftPackageResolvedAnalyzer --disableAutoconf --disableCmake --disableComposer --disableCpan --disableNuspec --disableNugetconf --disableAssembly --disableGolangDep --disableGolangMod --disableNodeJS --disableYarnAudit --disableNodeAudit --format JSON --noupdate --out /tmp/report.json --log /code/error.txt
+        security_control_output_file: /tmp/report.json
+        dispatch_type: workflow
+
+  software-component-analysis-js:
+    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '66be87c7-20ab-4f6d-adb5-db14aa44c30d') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-js'
+    runs-on: ubuntu-latest
+    steps:
+    - name: dependency-check-node
+      uses: jitsecurity-controls/jit-github-action@v1.6
+      with:
+        docker_user: jit-bot
+        docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
+        security_control: ghcr.io/jitsecurity-controls/control-npm-audit-slim:latest
+        security_control_args: audit --json --production
+        
+        dispatch_type: workflow
+
+  software-component-analysis-go:
+    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '0d967719-438e-4299-9ebb-f46dac4088f9') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-go'
+    runs-on: ubuntu-latest
+    steps:
+    - name: nancy
+      uses: jitsecurity-controls/jit-github-action@v1.6
+      with:
+        docker_user: jit-bot
+        docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
+        security_control: ghcr.io/jitsecurity-controls/control-nancy-alpine:latest
+        security_control_args: 
+        security_control_output_file: output.json
+        dispatch_type: workflow
