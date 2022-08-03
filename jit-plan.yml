@@ -9,6 +9,8 @@ items:
   - name: Conduct periodic vulnerability scans
     uses: >-
       jitsecurity-controls/jit-plans/items/infrastructure/item-vulnerability-scan.yml@latest
+  - name: Scan code dependencies for vulnerabilities
+    uses: jitsecurity-controls/jit-plans/items/code/item-dependency-check.yml@latest
 level: beginner
 version: 0.1
 references:
