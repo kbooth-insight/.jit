@@ -48,6 +48,20 @@ jobs:
         
         dispatch_type: workflow
 
+  docker-scan:
+    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '4f090709-fac0-4e99-ad69-ef283e811c03') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'docker-scan'
+    runs-on: ubuntu-latest
+    steps:
+    - name: trivy-dockerfile-scanner
+      uses: jitsecurity-controls/jit-github-action@v1.6
+      with:
+        docker_user: jit-bot
+        docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
+        security_control: ghcr.io/jitsecurity-controls/control-trivy-alpine:latest
+        security_control_args: --quiet config --severity HIGH,CRITICAL -f json --ignorefile /opt/.trivyignore /code
+        
+        dispatch_type: workflow
+
   software-component-analysis-python:
     if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, 'fa8da1d5-0dbd-4dd1-9d2d-77b25d02ea82') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-python'
     runs-on: ubuntu-latest
@@ -116,20 +130,6 @@ jobs:
         security_control: ghcr.io/jitsecurity-controls/open-remediation-pr-alpine:latest
         security_control_args: --github-token ${{fromJSON(github.event.inputs.client_payload).payload.github_token}} --fix-pr-config ${{fromJSON(github.event.inputs.client_payload).payload.fix_pr_config}}
         security_control_output_file: /tmp/report.json
-        dispatch_type: workflow
-
-  docker-scan:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '4f090709-fac0-4e99-ad69-ef283e811c03') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'docker-scan'
-    runs-on: ubuntu-latest
-    steps:
-    - name: trivy-dockerfile-scanner
-      uses: jitsecurity-controls/jit-github-action@v1.6
-      with:
-        docker_user: jit-bot
-        docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
-        security_control: ghcr.io/jitsecurity-controls/control-trivy-alpine:latest
-        security_control_args: --quiet conf --severity HIGH,CRITICAL -f json /code
-        
         dispatch_type: workflow
 
   secret-detection:
