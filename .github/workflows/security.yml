@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: python-code-scanning
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: semgrep-code-scanning
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: golang-code-scanning
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: trivy-dockerfile-scanner
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: dependency-check-python
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: dependency-check-node
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -95,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: nancy
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -109,12 +109,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: cloud-infrastructure-misconfiguration
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-kics-alpine:latest
-        security_control_args: 
+        security_control_args: scan -p /code -o /code/jit-report -f json --config \$KICS_CONFIG_FILE_PATH --disable-secrets
         security_control_output_file: /code/jit-report/results.json
         dispatch_type: workflow
 
@@ -123,7 +123,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: remediation-pr
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
@@ -137,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: secrets-detection
-      uses: jitsecurity-controls/jit-github-action@v1.6
+      uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
