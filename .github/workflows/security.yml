@@ -7,80 +7,80 @@ on:
           required: true
 jobs:
   static-code-analysis-python:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '1453f8c6-88a5-42ea-a8d9-714c82da0b62') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'static-code-analysis-python'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'static-code-analysis-python'
+    runs-on: ubuntu-20.04
     steps:
-    - name: python-code-scanning
+    - name: bandit
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-bandit-slim:latest
-        security_control_args: -r /code -f json -q -lll -iii
+        security_control_args: -r \${WORK_DIR:-.} -f json -q -lll -iii
         
         dispatch_type: workflow
 
   static-code-analysis-js:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, 'a2673eff-ede1-43ca-ae03-aca62ea3f231') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'static-code-analysis-js'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'static-code-analysis-js'
+    runs-on: ubuntu-20.04
     steps:
-    - name: semgrep-code-scanning
+    - name: semgrep
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-semgrep-alpine:latest
-        security_control_args: --json --config=/semgrep-config.yml --metrics=off --severity=ERROR /code
+        security_control_args: --json --config=/semgrep-config.yml --metrics=off --severity=ERROR \${WORK_DIR:-.}
         
         dispatch_type: workflow
 
   static-code-analysis-go:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, 'b43c396a-201e-4838-a290-801e02a3541d') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'static-code-analysis-go'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'static-code-analysis-go'
+    runs-on: ubuntu-20.04
     steps:
-    - name: golang-code-scanning
+    - name: gosec
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-gosec-alpine:latest
-        security_control_args: -fmt=json -severity=high /code/...
+        security_control_args: -fmt=json -severity=high \${WORK_DIR:-.}/...
         
         dispatch_type: workflow
 
   docker-scan:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '4f090709-fac0-4e99-ad69-ef283e811c03') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'docker-scan'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'docker-scan'
+    runs-on: ubuntu-20.04
     steps:
-    - name: trivy-dockerfile-scanner
+    - name: trivy
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-trivy-alpine:latest
-        security_control_args: --quiet config --severity HIGH,CRITICAL -f json --ignorefile /opt/.trivyignore /code
+        security_control_args: --quiet config --severity HIGH,CRITICAL -f json --ignorefile /opt/.trivyignore \${WORK_DIR:-.}
         
         dispatch_type: workflow
 
   software-component-analysis-python:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, 'fa8da1d5-0dbd-4dd1-9d2d-77b25d02ea82') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-python'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-python'
+    runs-on: ubuntu-20.04
     steps:
-    - name: dependency-check-python
+    - name: dependency-check
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-dependency-check-alpine:latest
-        security_control_args: --scan /code --enableExperimental --disableJar --disableRubygems --disableBundleAudit --disableCocoapodsAnalyzer --disableSwiftPackageManagerAnalyzer --disableSwiftPackageResolvedAnalyzer --disableAutoconf --disableCmake --disableComposer --disableCpan --disableNuspec --disableNugetconf --disableAssembly --disableGolangDep --disableGolangMod --disableNodeJS --disableYarnAudit --disableNodeAudit --format JSON --noupdate --out /tmp/report.json --log /code/error.txt
+        security_control_args: --scan \${WORK_DIR:-.} --enableExperimental --disableJar --disableRubygems --disableBundleAudit --disableCocoapodsAnalyzer --disableSwiftPackageManagerAnalyzer --disableSwiftPackageResolvedAnalyzer --disableAutoconf --disableCmake --disableComposer --disableCpan --disableNuspec --disableNugetconf --disableAssembly --disableGolangDep --disableGolangMod --disableNodeJS --disableYarnAudit --disableNodeAudit --format JSON --noupdate --out \$REPORT_FILE --log /code/error.txt
         security_control_output_file: /tmp/report.json
         dispatch_type: workflow
 
   software-component-analysis-js:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '66be87c7-20ab-4f6d-adb5-db14aa44c30d') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-js'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-js'
+    runs-on: ubuntu-20.04
     steps:
-    - name: dependency-check-node
+    - name: npm-audit
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
@@ -91,8 +91,8 @@ jobs:
         dispatch_type: workflow
 
   software-component-analysis-go:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '0d967719-438e-4299-9ebb-f46dac4088f9') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-go'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'software-component-analysis-go'
+    runs-on: ubuntu-20.04
     steps:
     - name: nancy
       uses: jitsecurity-controls/jit-github-action@v1.7
@@ -105,22 +105,22 @@ jobs:
         dispatch_type: workflow
 
   iac-misconfig-detection:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, 'd75b6a09-a4cd-4944-903e-7cf78ae7065b') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'iac-misconfig-detection'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'iac-misconfig-detection'
+    runs-on: ubuntu-20.04
     steps:
-    - name: cloud-infrastructure-misconfiguration
+    - name: kics
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-kics-alpine:latest
-        security_control_args: scan -p /code -o /code/jit-report -f json --config \$KICS_CONFIG_FILE_PATH --disable-secrets
+        security_control_args: scan -p \${WORK_DIR:-.} -o \$REPORT_FILE -f json --config \$KICS_CONFIG_FILE_PATH --disable-secrets
         security_control_output_file: /code/jit-report/results.json
         dispatch_type: workflow
 
   remediation-pr:
     if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'remediation-pr'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - name: remediation-pr
       uses: jitsecurity-controls/jit-github-action@v1.7
@@ -133,15 +133,15 @@ jobs:
         dispatch_type: workflow
 
   secret-detection:
-    if: contains( fromJSON(github.event.inputs.client_payload).payload.control_ids, '8ff8b60d-88ad-4bff-b3ae-7fcd6546f8a1') || fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'secret-detection'
-    runs-on: ubuntu-latest
+    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'secret-detection'
+    runs-on: ubuntu-20.04
     steps:
-    - name: secrets-detection
+    - name: gitleaks
       uses: jitsecurity-controls/jit-github-action@v1.7
       with:
         docker_user: jit-bot
         docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
         security_control: ghcr.io/jitsecurity-controls/control-gitleaks-alpine:latest
-        security_control_args: detect --config \$GITLEAKS_CONFIG_FILE_PATH --source /code -v --report-format json --report-path /tmp/report.json --redact --no-git --exit-code 0
+        security_control_args: detect --config \$GITLEAKS_CONFIG_FILE_PATH --source \${WORK_DIR:-.} -v --report-format json --report-path \$REPORT_FILE --redact --no-git --exit-code 0
         security_control_output_file: /tmp/report.json
         dispatch_type: workflow
