@@ -36,21 +36,6 @@ jobs:
         
         dispatch_type: workflow
 
-  iac-misconfig-detection:
-    if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'iac-misconfig-detection'
-    runs-on: ubuntu-20.04
-    steps:
-    - name: kics
-      uses: jitsecurity-controls/jit-github-action@v1.9
-      with:
-        docker_user: jit-bot
-        docker_password: ${{fromJSON(github.event.inputs.client_payload).payload.container_registry_token}}
-        
-        security_control: ghcr.io/jitsecurity-controls/control-kics-alpine:latest
-        security_control_args: scan -p \${WORK_DIR:-.} -o \$REPORT_FILE -f json --config \$KICS_CONFIG_FILE_PATH --disable-secrets
-        security_control_output_file: /code/jit-report/results.json
-        dispatch_type: workflow
-
   iac-misconfig-detection-cloudformation:
     if: fromJSON(github.event.inputs.client_payload).payload.workflow_job_name == 'iac-misconfig-detection-cloudformation'
     runs-on: ubuntu-20.04
